@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name="Livro")
+@Table(name = "livro")
 
 public class LivroModel {
 
@@ -112,6 +112,15 @@ public class LivroModel {
 
 
     public boolean isDisponivel() {
+
         return disponivel;
+    }
+
+    public boolean isReservado() {
+        return reservado;
+    }
+
+    public void setReservado(boolean reservado) {
+        this.reservado = reservado;
     }
 }
