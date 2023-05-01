@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ProjetolinguagensApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProjetolinguagensApplication.class, args);
+
+        SpringApplication.run(ProjetolinguagensApplication.class, args);
 	}
 
 }
+

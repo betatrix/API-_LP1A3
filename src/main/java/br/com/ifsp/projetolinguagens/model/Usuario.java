@@ -1,31 +1,27 @@
 package br.com.ifsp.projetolinguagens.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "tipo"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Cliente.class, name = "cliente"),
+        @JsonSubTypes.Type(value = Funcionario.class, name = "funcionario")
+})
 
-@Entity
-@Table(name = "usuario")
-public class UsuarioModel {
+public abstract class Usuario {
 
-    @Column(name = "nome")
     private String nome;
-
-    @Column(name = "cpf")
     private String cpf;
-
-    @Column(name = "endereco")
     private String endereco;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "senha")
     private String senha;
 
-    /*
-    public UsuarioModel(String nome, String cpf, String endereco, String email, String senha) {
+    public Usuario(String nome, String cpf, String endereco, String email, String senha) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
@@ -33,25 +29,28 @@ public class UsuarioModel {
         this.senha = senha;
     }
 
-     */
-    public void emprestarLivro(LivroModel livro){
-        livro.emprestar(livro.getId());
+    public void emprestarLivro(Livro livro){
+        livro.emprestar();
         //empresta um exemplar do livro
     }
 
-    public void devolverLivro(LivroModel livro){
+    public void devolverLivro(Livro livro){
         //devolve um exemplar do livro
-        livro.devolver(livro.getId());
+        livro.devolver();
     }
 
-    public void reservarLivro(LivroModel livro){
-        livro.setReservado(true);
+    public void reservarLivro(Livro livro){
         //reserva um livro
+        livro.decrementarExemplaresDisponiveis();
+        livro.setReservado(true);
+        //Podemos criar uma verificação para caso o numero de exemplares
+        // disponiveis seja 0, envie uma exceção,
     }
 
-    public void cancelarReserva(LivroModel livro){
-        livro.setReservado(false);
+    public void cancelarReserva(Livro livro){
         //cancela a reserva do livro
+        livro.incrementarExemplaresDisponiveis();
+        livro.setReservado(false);
     }
 
     public String getNome() {
