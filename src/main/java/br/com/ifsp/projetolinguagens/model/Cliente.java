@@ -8,13 +8,4 @@ public class Cliente extends Usuario {
         super(nome, cpf, endereco, email, senha);
     }
 
-    @Override
-    public void reservarLivro(Livro livro) {
-        super.reservarLivro(livro);
-    }
-
-    @Override
-    public void cancelarReserva(Livro livro) {
-        super.cancelarReserva(livro);
-    }
 }

@@ -1,10 +1,13 @@
 package br.com.ifsp.projetolinguagens.controller;
 
+import br.com.ifsp.projetolinguagens.exceptions.LivroExceptions;
 import br.com.ifsp.projetolinguagens.interfaces.GerenciamentoDeUsuarios;
 import br.com.ifsp.projetolinguagens.model.Cliente;
+import br.com.ifsp.projetolinguagens.model.Emprestimo;
 import br.com.ifsp.projetolinguagens.model.Livro;
 import br.com.ifsp.projetolinguagens.interfaces.GerenciamentoDeLivros;
 import br.com.ifsp.projetolinguagens.model.Usuario;
+import br.com.ifsp.projetolinguagens.services.EmprestimoService;
 import br.com.ifsp.projetolinguagens.services.LivroService;
 import br.com.ifsp.projetolinguagens.services.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +32,78 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
         @Autowired
         private UsuariosService usuariosService;
 
+        @Autowired
+        private EmprestimoService emprestimoService;
+
+        // CODIGOS PARA POST DE EMPRESTIMO QUE DERAM ERRO
+
+//    @PostMapping("/emprestimos")
+//    public ResponseEntity<Void> criarEmprestimo(@RequestBody Emprestimo emprestimo) {
+//        Livro livro = livroService.buscarLivro(emprestimo.getLivro().getId());
+//        Cliente cliente = UsuariosService.buscarCliente(emprestimo.getCliente().getCpf());
+//        Usuario funcionario = UsuariosService.buscarUsuario(emprestimo.getFuncionario().getCpf());
+//
+//        emprestimo.setLivro(livro);
+//        emprestimo.setCliente(cliente);
+//        emprestimo.setFuncionario(funcionario);
+//
+//        emprestimoService.RealizarEmprestimo(emprestimo);
+//
+//       return ResponseEntity.created(null).build();
+//    }
+
+//
+//    @PostMapping("/emprestimo")
+//    public Emprestimo criarEmprestimo(@RequestBody Emprestimo emprestimo) {
+//        // Busca o livro pelo ID e atualiza o objeto empréstimo
+//        Livro livro = livroService.buscarLivro(emprestimo.getLivro().getId());
+//        if (livro == null) {
+//            throw new IllegalArgumentException("Livro não encontrado.");
+//        }
+//        emprestimo.setLivro(livro);
+//
+//        // Busca o cliente pelo ID e atualiza o objeto empréstimo
+//        Cliente cliente = usuariosService.buscarCliente(emprestimo.getCliente().getCpf());
+//        if (cliente == null) {
+//            throw new IllegalArgumentException("Cliente não encontrado.");
+//        }
+//        emprestimo.setCliente(cliente);
+//
+//        // Busca o usuário pelo ID e atualiza o objeto empréstimo
+//        Usuario usuario = usuariosService.buscarFuncionario(emprestimo.getUsuario().getCpf());
+//        if (usuario == null) {
+//            throw new IllegalArgumentException("Usuário não encontrado.");
+//        }
+//        emprestimo.setUsuario(usuario);
+//
+//        // verificar se as datas foram inseridas
+//        // Adiciona o objeto empréstimo na lista de empréstimos
+//
+//        emprestimoService.RealizarEmprestimo(emprestimo);
+//
+//        // Retorna o objeto empréstimo criado
+//        return emprestimo;
+//    }
+
+    /* REALIZA EMPRESTIMO - SE CONECTA COM A CLASSE DE SERVIÇOS DO USUARIO */
+    @PostMapping("/emprestimos")
+    public ResponseEntity<Emprestimo> RealizarEmprestimo(@RequestBody Emprestimo emprestimo) {
+        Emprestimo novoEmprestimo = EmprestimoService.realizarEmprestimo(emprestimo);
+        return new ResponseEntity<>(novoEmprestimo, HttpStatus.CREATED);
+    }
+
+    /*  MANIPULAÇÃO DOS LIVROS */
+
         @PostMapping("/livros")
         public ResponseEntity<Livro> adicionarLivro(@RequestBody Livro livro) {
             Livro livroAdicionado = livroService.adicionarLivro(livro);
             return new ResponseEntity<>(livroAdicionado, HttpStatus.CREATED);
         }
 
-        @GetMapping("/livros")
+
+
+
+    @GetMapping("/livros")
         public ResponseEntity<List<Livro>> listarLivros() {
             List<Livro> livros = livroService.listarLivros();
             return new ResponseEntity<>(livros, HttpStatus.OK);
@@ -50,7 +118,6 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
             return new ResponseEntity<>(livro, HttpStatus.OK);
         }
 
-
         @DeleteMapping("/livros/{id}")
         public ResponseEntity<Void> excluirLivro(@PathVariable Integer id) {
             Livro livro = livroService.buscarLivro(id);
@@ -60,6 +127,7 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
             livroService.excluirLivro(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
     // Método PUT
 
     @PutMapping("/livros/{id}")
@@ -93,8 +161,6 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
         List<Cliente> clientes = usuariosService.listarClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
-
-
 
 
     // METOGO GET PELO CPF

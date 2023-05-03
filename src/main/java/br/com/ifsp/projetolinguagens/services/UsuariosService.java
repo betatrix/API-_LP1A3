@@ -12,8 +12,8 @@ import java.util.List;
 @Service
 public class UsuariosService {
 
-    List<Usuario> usuarios = new ArrayList<>();
-    List<Cliente> clientes = new ArrayList<>();
+    static List<Usuario> usuarios = new ArrayList<>();
+    static List<Cliente> clientes = new ArrayList<>();
     List<Funcionario> funcionarios = new ArrayList<>();
     List<Administrador> administradores = new ArrayList<>();
 
@@ -38,10 +38,6 @@ public class UsuariosService {
     }
 
     /*  ADICIONA NOVOS OBJETOS NAS LISTAS */
-    public Usuario adicionarUsuario(Usuario usuario) {
-        usuarios.add(usuario);
-        return usuario;
-    }
 
     public Cliente adicionarCliente(Cliente cliente) {
         usuarios.add(cliente);
@@ -71,15 +67,14 @@ public class UsuariosService {
 
     /*  BUSCA OS OBJETOS DAS LISTAS PELO CPF  */
 
-
-    public Usuario buscarUsuario(String cpf) {
+    public static Usuario buscarUsuario(String cpf) {
         return usuarios.stream()
                 .filter(l -> l.getCpf().equals(cpf))
                 .findFirst()
                 .orElse(null);
     }
 
-    public Cliente buscarCliente(String cpf) {
+    public static Cliente buscarCliente(String cpf) {
         return clientes.stream()
                 .filter(l -> l.getCpf().equals(cpf))
                 .findFirst()
@@ -94,14 +89,18 @@ public class UsuariosService {
                 .orElse(null);
     }
 
+    /*  MÉTODO QUE VAI SER USADO EM BIBLIOTECA PARA BUSCAR USUARIO PELO NOME */
+    public Usuario buscarUsuarioNome(String nome) {
+        return usuarios.stream()
+                .filter(l -> l.getCpf().equals(nome))
+                .findFirst()
+                .orElse(null);
+    }
+
+
+
     /*  APAGA USUARIOS/CLIENTES/FUNCIONARIOS */
 
-/*
-    public void excluirUsuario(String cpf) {
-
-        usuarios.removeIf(l -> l.getCpf().equals(cpf));
-    }
-*/
     // MODIFICAÇÃO DO METODO PARA VERIFICAR QUE TIPO DE OBJETO É E APAGAR DA LISTA CORRESPONDENTE
 
     public void excluirUsuario(String cpf) {
@@ -115,23 +114,11 @@ public class UsuariosService {
             }
         }
     }
-//
-//    public <T extends Usuario> T alterarUsuario(String cpf, T usuario) {
-//        Usuario usuarioAtualizado = buscarUsuario(cpf);
-//        if (usuarioAtualizado == null) {
-//            return null;
-//        }
-//        if (usuario.getClass().equals(usuarioAtualizado.getClass())) {
-//            T usuarioAtualizadoCasted = (T) usuarioAtualizado;
-//            usuarioAtualizadoCasted.setNome(usuario.getNome());
-//            usuarioAtualizadoCasted.setEndereco(usuario.getEndereco());
-//            usuarioAtualizadoCasted.setEmail(usuario.getEmail());
-//            usuarioAtualizadoCasted.setSenha(usuario.getSenha());
-//            return usuarioAtualizadoCasted;
-//        }
-//        return null;
-//    }
 
+    /*  METODO PARA ATUALIZAR UM USUARIO GENERICO
+    *   ESSE MÉTODO ESTÁ RELACIONADO COM A MANIULAÇÃO DO JSON, FEITA NA CLASSE DO USUARIO,
+    *   SEM ISSO, O MÉTODO NÃO FUNCIONA
+    * */
     public <T extends Usuario> T atualizarUsuario(String cpf, T usuario) {
         Usuario usuarioAtualizado = buscarUsuario(cpf);
         if (usuarioAtualizado == null) {
@@ -156,31 +143,9 @@ public class UsuariosService {
         return null;
     }
 
+
 }
 
-
-/*  ALTERA USUARIOS/CLIENTES/FUNCIONARIOS */
-/*
-
-    public Usuario alterarUsuario(String cpf, Usuario usuario) {
-        Usuario usuarioAtualizado = buscarUsuario(cpf);
-        if (usuarioAtualizado == null) {
-            return null;
-        }
-        usuarioAtualizado.setNome(usuario.getNome());
-        usuarioAtualizado.setEmail(usuario.getEmail());
-        usuarioAtualizado.setEndereco(usuario.getEndereco());
-        usuarioAtualizado.setSenha(usuario.getSenha());
-        return usuarioAtualizado;
-    }
-}
-*/
-
-// METODO PARA ALTERAR ATUALIZADO
-/*
- *   Esse método recebe um tipo genérico de objeto, para que possa
- * ser utilizado por qualquer classe que extende usuário.
- * */
 
 
 

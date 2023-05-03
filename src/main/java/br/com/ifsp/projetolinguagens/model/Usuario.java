@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        include = JsonTypeInfo.As.PROPERTY,
         property = "tipo"
 )
 @JsonSubTypes({
@@ -43,7 +43,7 @@ public abstract class Usuario {
         //reserva um livro
         livro.decrementarExemplaresDisponiveis();
         livro.setReservado(true);
-        //Podemos criar uma verificação para caso o numero de exemplares
+        // Podemos criar uma verificação para caso o numero de exemplares
         // disponiveis seja 0, envie uma exceção,
     }
 

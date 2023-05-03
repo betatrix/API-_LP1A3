@@ -1,5 +1,7 @@
 package br.com.ifsp.projetolinguagens.model;
 
+import java.util.Objects;
+
 public class Livro {
 
     private Integer id;
@@ -11,6 +13,10 @@ public class Livro {
     private int numExemplaresDisponiveis;
     private boolean reservado = false;
 
+
+    public Livro(Integer id) {
+        this.id = id;
+    }
     public Livro(Integer id, String titulo, String autor, String editora, int anoPublicacao, int numExemplares, int numExemplaresDisponiveis, boolean reservado) {
         this.id = id;
         this.titulo = titulo;
@@ -20,6 +26,19 @@ public class Livro {
         this.numExemplares = numExemplares;
         this.numExemplaresDisponiveis = numExemplaresDisponiveis;
         this.reservado = reservado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Livro livro = (Livro) o;
+        return anoPublicacao == livro.anoPublicacao && numExemplares == livro.numExemplares && numExemplaresDisponiveis == livro.numExemplaresDisponiveis && Objects.equals(id, livro.id) && Objects.equals(titulo, livro.titulo) && Objects.equals(autor, livro.autor) && Objects.equals(editora, livro.editora);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, autor, editora, anoPublicacao, numExemplares, numExemplaresDisponiveis);
     }
 
     // método responsável por decrementar o numero de exemplares

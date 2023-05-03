@@ -1,5 +1,6 @@
 package br.com.ifsp.projetolinguagens.services;
 
+import br.com.ifsp.projetolinguagens.exceptions.LivroExceptions;
 import br.com.ifsp.projetolinguagens.model.Livro;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,20 @@ public class LivroService {
         livros.add(livro2);
     }
 
+
     public Livro adicionarLivro(Livro livro) {
+        if (livros.contains(livro)) {
+            throw new LivroExceptions("Nao foi possivel adicionar, esse livro ja existe.");
+        }
         livros.add(livro);
         return livro;
     }
 
+
     public List<Livro> listarLivros() {
+        if (livros.size() == 0) {
+            throw new LivroExceptions("Nao foi possivel listar, pois nao existem livros cadastrados.");
+        }
         return livros;
     }
 
@@ -46,6 +55,31 @@ public class LivroService {
         if (livroAtualizado == null) {
             return null;
         }
+
+        if (livro.getTitulo() == null) {
+            throw new LivroExceptions("Título não pode ser nulo");
+        }
+
+        if (livro.getAutor() == null) {
+            throw new LivroExceptions("Autor não pode ser nulo");
+        }
+
+        if (livro.getEditora() == null) {
+            throw new LivroExceptions("Editora não pode ser nula");
+        }
+
+        if (livro.getAnoPublicacao() == 0) {
+            throw new LivroExceptions("Ano de publicação não pode ser nulo");
+        }
+
+        if (livro.getNumExemplares() == 0) {
+            throw new LivroExceptions("Número de exemplares não pode ser nulo");
+        }
+
+        if (livro.getNumExemplaresDisponiveis() == 0) {
+            throw new LivroExceptions("Número de exemplares disponíveis não pode ser nulo");
+        }
+
         livroAtualizado.setTitulo(livro.getTitulo());
         livroAtualizado.setAutor(livro.getAutor());
         livroAtualizado.setEditora(livro.getEditora());
@@ -53,6 +87,8 @@ public class LivroService {
         livroAtualizado.setNumExemplares(livro.getNumExemplares());
         livroAtualizado.setNumExemplaresDisponiveis(livro.getNumExemplaresDisponiveis());
         livroAtualizado.setReservado(livro.isReservado());
+
         return livroAtualizado;
     }
 }
+

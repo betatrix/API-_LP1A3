@@ -194,28 +194,16 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // METODO PUT - Essa rota utiliza o método alterarUsuario da classe de serviços de usuario, que permite que
+    // possa ser utilizada também para alterar funcionarios e clientes
     @PutMapping("/usuarios/{cpf}")
-    public <T extends Usuario> ResponseEntity<T> alterarUsuario(@PathVariable String cpf, @RequestBody T usuario) {
-        T usuarioAtualizado = usuariosService.atualizarUsuario(cpf, usuario);
-        if (usuarioAtualizado == null) {
+    public ResponseEntity<Usuario> alterarUsuario(@PathVariable String cpf, @RequestBody Usuario usuario) {
+        Usuario usuarioAtualizado = usuariosService.atualizarUsuario(cpf, usuario);
+        if(usuarioAtualizado == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
     }
-
-//    @PutMapping("/usuarios/{cpf}")
-//    public ResponseEntity<Usuario> alterarUsuario(@PathVariable String cpf, @RequestBody Usuario usuario) {
-//        Usuario usuarioAtualizado = usuariosService.alterarUsuario(cpf, usuario);
-//        if(usuarioAtualizado == null){
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
-//    }
-
-
-    // METODO PUT - Essa rota utiliza o método alterarUsuario da classe de serviços, que permite que
-    // possa ser utilizada também para excluir funcionarios e clientes
-
 
 
     /*########################### ROTAS PARA MANIPULAR FUNCIONARIOS ########################3*/
