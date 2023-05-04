@@ -19,4 +19,5 @@ public class Administrador extends Usuario{
     public void buscarfuncionario(String cpf){
         //faz a busca do funcionario pelo cpf
     }
+
 }

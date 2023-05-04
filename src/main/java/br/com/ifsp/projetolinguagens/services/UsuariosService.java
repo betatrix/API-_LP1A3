@@ -1,5 +1,6 @@
 package br.com.ifsp.projetolinguagens.services;
 
+import br.com.ifsp.projetolinguagens.exceptions.UsuarioExceptions;
 import br.com.ifsp.projetolinguagens.model.Administrador;
 import br.com.ifsp.projetolinguagens.model.Cliente;
 import br.com.ifsp.projetolinguagens.model.Funcionario;
@@ -40,19 +41,24 @@ public class UsuariosService {
     /*  ADICIONA NOVOS OBJETOS NAS LISTAS */
 
     public Cliente adicionarCliente(Cliente cliente) {
+        if(cliente == null){
+            throw new UsuarioExceptions("O usuario enviado e nulo. Nao foi possível adicionar.");
+        }
         usuarios.add(cliente);
         clientes.add(cliente);
         return cliente;
     }
 
     public Funcionario adicionarFuncionario(Funcionario funcionario) {
+        if(funcionario == null){
+            throw new UsuarioExceptions("O funcionario enviado e nulo. Nao foi possivel adicionar.");
+        }
         usuarios.add(funcionario);
         funcionarios.add(funcionario);
         return funcionario;
     }
 
     /*  LISTA OS OBJETOS DAS LISTAS */
-
     public List<Usuario> listarUsuarios() {
         return usuarios;
     }

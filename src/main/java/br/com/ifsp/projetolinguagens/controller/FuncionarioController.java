@@ -1,12 +1,9 @@
 package br.com.ifsp.projetolinguagens.controller;
 
-import br.com.ifsp.projetolinguagens.exceptions.LivroExceptions;
+import br.com.ifsp.projetolinguagens.dto.EmprestimoDTO;
 import br.com.ifsp.projetolinguagens.interfaces.GerenciamentoDeUsuarios;
-import br.com.ifsp.projetolinguagens.model.Cliente;
-import br.com.ifsp.projetolinguagens.model.Emprestimo;
-import br.com.ifsp.projetolinguagens.model.Livro;
+import br.com.ifsp.projetolinguagens.model.*;
 import br.com.ifsp.projetolinguagens.interfaces.GerenciamentoDeLivros;
-import br.com.ifsp.projetolinguagens.model.Usuario;
 import br.com.ifsp.projetolinguagens.services.EmprestimoService;
 import br.com.ifsp.projetolinguagens.services.LivroService;
 import br.com.ifsp.projetolinguagens.services.UsuariosService;
@@ -15,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -86,11 +84,30 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
 //    }
 
     /* REALIZA EMPRESTIMO - SE CONECTA COM A CLASSE DE SERVIÇOS DO USUARIO */
-    @PostMapping("/emprestimos")
-    public ResponseEntity<Emprestimo> RealizarEmprestimo(@RequestBody Emprestimo emprestimo) {
-        Emprestimo novoEmprestimo = EmprestimoService.realizarEmprestimo(emprestimo);
+//    @PostMapping("/emprestimos")
+//    public ResponseEntity<Emprestimo> RealizarEmprestimo(@RequestBody Emprestimo emprestimo) {
+//        Emprestimo novoEmprestimo = EmprestimoService.realizarEmprestimo(emprestimo);
+//        return new ResponseEntity<>(novoEmprestimo, HttpStatus.CREATED);
+//    }
+
+    @PostMapping("/emprestimo")
+    public ResponseEntity<Emprestimo> RealizarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
+        String cpfcliente = emprestimoDTO.getCpfCliente();
+        String cpffunc = emprestimoDTO.getCpfFuncionario();
+        Integer idlivro = emprestimoDTO.getiDlivro();
+        Date dataEmprestimo = emprestimoDTO.getDataEmprestimo();
+        Date dataDevolucao = emprestimoDTO.getDataDevolucao();
+
+        Cliente cliente = usuariosService.buscarCliente(cpfcliente);
+        Funcionario funcionario = usuariosService.buscarFuncionario(cpffunc);
+        Livro livro = livroService.buscarLivro(idlivro);
+
+        Emprestimo emp = new Emprestimo(cliente, funcionario, livro, dataEmprestimo, dataDevolucao);
+
+        Emprestimo novoEmprestimo = EmprestimoService.realizarEmprestimo(emp);
         return new ResponseEntity<>(novoEmprestimo, HttpStatus.CREATED);
     }
+
 
     /*  MANIPULAÇÃO DOS LIVROS */
 
@@ -99,8 +116,6 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
             Livro livroAdicionado = livroService.adicionarLivro(livro);
             return new ResponseEntity<>(livroAdicionado, HttpStatus.CREATED);
         }
-
-
 
 
     @GetMapping("/livros")

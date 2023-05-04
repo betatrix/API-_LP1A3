@@ -3,45 +3,42 @@ package br.com.ifsp.projetolinguagens.model;
 import java.util.Date;
 
 public class Emprestimo {
-    private Integer iDlivro;
-    private String cpfCliente;
-    private String cpfFuncionario;
-
-    //private Cliente cliente;
-   // private Usuario funcionario;
+    private Cliente cliente;
+    private Usuario usuario;
+    private Livro livro;
     private Date dataEmprestimo;
     private Date dataDevolucao;
 
-    public Emprestimo(Integer iDlivro, String cpfCliente, String cpfFuncionario, Date dataEmprestimo, Date dataDevolucao) {
-        this.iDlivro = iDlivro;
-        this.cpfCliente = cpfCliente;
-        this.cpfFuncionario = cpfFuncionario;
+    public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucao) {
+        this.cliente = cliente;
+        this.usuario = usuario;
+        this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
     }
 
-    public Integer getiDlivro() {
-        return iDlivro;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setiDlivro(Integer iDlivro) {
-        this.iDlivro = iDlivro;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public String getCpfCliente() {
-        return cpfCliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCpfCliente(String cpfCliente) {
-        this.cpfCliente = cpfCliente;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public String getCpfFuncionario() {
-        return cpfFuncionario;
+    public Livro getLivro() {
+        return livro;
     }
 
-    public void setCpfFuncionario(String cpfFuncionario) {
-        this.cpfFuncionario = cpfFuncionario;
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
 
     public Date getDataEmprestimo() {

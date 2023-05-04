@@ -5,7 +5,6 @@ import br.com.ifsp.projetolinguagens.model.*;
 import br.com.ifsp.projetolinguagens.services.EmprestimoService;
 import br.com.ifsp.projetolinguagens.services.LivroService;
 import br.com.ifsp.projetolinguagens.services.UsuariosService;
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -134,8 +134,8 @@ public class BibliotecaController {
 //    }
 
     @GetMapping("/emprestimo/{data}")
-    public ResponseEntity<List<Emprestimo>> buscarPorData(@PathVariable String data) {
-        List<Emprestimo> emprestimos = emprestimoService.buscarPorData(LocalDate.parse(data));
+    public ResponseEntity<List<Emprestimo>> buscarPorData(@PathVariable String data) throws ParseException {
+        List<Emprestimo> emprestimos = emprestimoService.buscarPorData(data);
         return ResponseEntity.ok(emprestimos);
     }
 

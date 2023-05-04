@@ -1,9 +1,9 @@
 package br.com.ifsp.projetolinguagens.services;
 
 import br.com.ifsp.projetolinguagens.model.Emprestimo;
-import br.com.ifsp.projetolinguagens.model.Livro;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +16,12 @@ import java.util.Date;
 public class EmprestimoService {
 
     private static List<Emprestimo> emprestimos = new ArrayList<>();
+
+    public static Date parseDate(String data) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        return sdf.parse(data);
+    }
 /*
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -32,6 +38,7 @@ public class EmprestimoService {
         return emprestimo;
     }
 
+
     public static List<Emprestimo> listarEmprestimos() {
         return emprestimos;
     }
@@ -39,7 +46,7 @@ public class EmprestimoService {
     public static List<Emprestimo> listarEmprestimosPorCpfCliente(String cpfCliente) {
         List<Emprestimo> emprestimosPorCpfCliente = new ArrayList<>();
         for (Emprestimo emprestimo : emprestimos) {
-            if (emprestimo.getCpfCliente().equals(cpfCliente)) {
+            if (emprestimo. getCliente().getCpf().equals(cpfCliente)) {
                 emprestimosPorCpfCliente.add(emprestimo);
             }
         }
@@ -49,13 +56,14 @@ public class EmprestimoService {
     public static List<Emprestimo> listarEmprestimosPorCpfFuncionario(String cpfFuncionario) {
         List<Emprestimo> emprestimosPorCpfFuncionario = new ArrayList<>();
         for (Emprestimo emprestimo : emprestimos) {
-            if (emprestimo.getCpfFuncionario().equals(cpfFuncionario)) {
+            if (emprestimo.getUsuario().getCpf().equals(cpfFuncionario)) {
                 emprestimosPorCpfFuncionario.add(emprestimo);
             }
         }
         return emprestimosPorCpfFuncionario;
     }
 
+//
 //    public static List<Emprestimo> listarEmprestimosPorData(Date dataEmprestimo) {
 //        List<Emprestimo> emprestimosPorData = new ArrayList<>();
 //        for (Emprestimo emprestimo : emprestimos) {
@@ -65,7 +73,7 @@ public class EmprestimoService {
 //        }
 //        return emprestimosPorData;
 //    }
-
+//
 //    public static List<Emprestimo> listarEmprestimosPorData(Date dataEmprestimo) {
 //        List<Emprestimo> emprestimosPorData = new ArrayList<>();
 //        for (Emprestimo emprestimo : emprestimos) {
@@ -75,7 +83,7 @@ public class EmprestimoService {
 //        }
 //        return emprestimosPorData;
 //    }
-
+//
 //    public static List<Emprestimo> listarEmprestimosPorDataEmprestimo(Date dataEmprestimo) {
 //        List<Emprestimo> emprestimosPorDataEmprestimo = new ArrayList<>();
 //        for (Emprestimo e : emprestimos) {
@@ -85,7 +93,7 @@ public class EmprestimoService {
 //        }
 //        return emprestimosPorDataEmprestimo;
 //    }
-
+//
 //    public static List<Emprestimo> listarEmprestimosPorDataEmprestimo(Date dataEmprestimo) {
 //        List<Emprestimo> emprestimosPorDataEmprestimo = new ArrayList<>();
 //        for (Emprestimo e : emprestimos) {
@@ -98,10 +106,12 @@ public class EmprestimoService {
 //        return emprestimosPorDataEmprestimo;
 //    }
 
-    public ArrayList<Emprestimo> buscarPorData(LocalDate data) {
+    public ArrayList<Emprestimo> buscarPorData(String data) throws ParseException {
         ArrayList<Emprestimo> emprestimosPorData = new ArrayList<Emprestimo>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = dateFormat.parse(data);
         for (Emprestimo e : emprestimos) {
-            if (e.getDataEmprestimo().equals(data)) {
+            if (e.getDataEmprestimo().equals(date)) {
                 emprestimosPorData.add(e);
             }
         }

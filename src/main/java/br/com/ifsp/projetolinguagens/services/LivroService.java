@@ -38,17 +38,39 @@ public class LivroService {
         return livros;
     }
 
-    public Livro buscarLivro(Integer id) {
-        return livros.stream()
+
+    public Livro buscarLivro(Integer id){
+        Livro livro = livros.stream()
                 .filter(l -> l.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+
+        if (livro == null) {
+            throw new LivroExceptions(id);
+            //throw new LivroExceptions("Não foi possível encontrar um livro com o ID fornecido.");
+        }
+        return livro;
     }
+/* O método recebe o id do livro que estamos buscando, depois disso é criada uma instância de livro ao
+    qual será atribuído o livro correspondente. O método stream() do objeto livros para criar um fluxo
+    de objetos Livro e o método filter() restringe o fluxo apenas aos objetos Livro que têm o mesmo ID
+    que o valor do parâmetro id.
+    O método findFirst() é usado para retornar o primeiro objeto Livro que atende aos critérios definidos
+    pelo filter(). Caso nenhum objeto seja encontrado, o método findFirst() retorna um objeto Optional vazio.
+    O método orElse(null) é usado para retornar o objeto Livro encontrado pelo findFirst(), ou null se nenhum
+    objeto for encontrado.
+
+    Se o valor de livro for null, o método lança uma exceção LivroExceptions com uma mensagem de erro indicando
+    que nenhum livro com o ID fornecido foi encontrado. Caso contrário, o método retorna o objeto Livro encontrado.
+* */
 
     public void excluirLivro(Integer id) {
-        livros.removeIf(l -> l.getId().equals(id));
+        boolean livroRemovido = livros.removeIf(l -> l.getId().equals(id));
+            if (!livroRemovido) {
+                throw new LivroExceptions(id);
+            }
     }
-
+    // verificar
 
     public Livro alterarLivro(Integer id, Livro livro) {
         Livro livroAtualizado = buscarLivro(id);

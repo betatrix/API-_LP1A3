@@ -143,28 +143,62 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
 
 
     @PostMapping("/clientes")
+    /*
+         Para acessar a rota basta adicionar /clientes
+          na rota padrão /admin e definir o método como POST para adicionar um cliente
+    */
     public ResponseEntity<Cliente> adicionarCliente(@RequestBody Cliente cliente) {
         Cliente novoCliente = usuariosService.adicionarCliente(cliente);
         return new ResponseEntity<>(novoCliente, HttpStatus.CREATED);
     }
 
+    /*
+    *   O método recebe pelo corpo da requisição um JSON com um objeto cliente,
+    *   cria-se uma nova instancia de cliente que irá receber a resposta do método
+    *   adicionarCliente, que recebe por parametro o cliente enviado por JSON. A resposta
+    *   do método é o próprio objeto que foi criado, e através do ResponseEntity é enviado
+    *   como resposta à requisição o novo cliente e o status http 201.
+    * */
+
 
     // METODO GET
     @GetMapping("/usuarios")
+    /*
+         Para acessar a rota basta adicionar /usuarios
+          na rota padrão /admin e definir o método como GET para listar os clientes
+    */
     public ResponseEntity<List<Usuario>> listarUsuario() {
         List<Usuario> usuarios = usuariosService.listarUsuarios();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
+    /*
+    *   Cria uma lista de usuarios a qual será atribuída a lista de usuarios armazenados, que será
+    *   retornada pelo método listarUsuarios(). Por fim, é retornada a lista de usuarios e o status http 200.
+    * */
 
     @GetMapping("/clientes")
+    /*
+         Para acessar a rota basta adicionar /clientes
+          na rota padrão /admin e definir o método como GET para listar os clientes
+    */
     public ResponseEntity<List<Cliente>> listarCliente() {
         List<Cliente> clientes = usuariosService.listarClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
+    /*
+    *   /*
+        chama o método ListarClientes e retorna para o usuario todos os clientes da lista,
+        juntamente com o httpStatus de OK, que é o 200
 
+     */
 
-    // METOGO GET PELO CPF
+    // METODO GET PELO CPF
     @GetMapping("/usuarios/{cpf}")
+     /*
+         Para acessar a rota basta adicionar /usuarios/cpf do usuario que quer listar
+          na rota padrão /admin e definir o método como GET para listar o usuario com aquele
+          cpf
+    */
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable String cpf) {
         Usuario usuario = usuariosService.buscarUsuario(cpf);
         if (usuario == null) {
@@ -172,8 +206,19 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
         }
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
+    /*
+           Recebe um cpf pela url da requisição, chama o método buscarUsuario e passa esse id por parametro e
+           armazena o resultado em usuario. Se o usuario for nulo, ou seja, nao exitir um usuario com esse id,
+           entao é retornado o httpStatus NOT_FOUND, caso o usuario seja encontrado, retorna um httpStatus 200
+           de OK, e o usuario que foi solicitado.
+     */
 
     @GetMapping("/clientes/{cpf}")
+     /*
+         Para acessar a rota basta adicionar /clientes/cpf do usuario que quer listar
+          na rota padrão /admin e definir o método como GET para listar o cliente com aquele
+          cpf
+    */
     public ResponseEntity<Cliente> buscarCliente(String cpf) {
         Cliente cliente = usuariosService.buscarCliente(cpf);
         if (cliente == null) {
@@ -183,7 +228,7 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
     }
 
 
-    // METODO DELETE - UM METODO DE DELETE E DE PUT PARA TODOS OS USUARIOS
+    // METODO DELETE - ESSE METODO É VALIDO PARA TODOS QUE EXTENDEM USUARIO
     @DeleteMapping("/usuarios/{cpf}")
     public ResponseEntity<Void> excluirUsuario(@PathVariable String cpf) {
         Usuario usuario = usuariosService.buscarUsuario(cpf);
@@ -193,6 +238,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
         usuariosService.excluirUsuario(cpf);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+     /*
+           Recebe um CPF pela url da requisição, chama o método buscarUsuario e passa esse id por parametro e
+           armazena o resultado em usuario. Se o usuario for nulo, ou seja, nao exitir um usuario com esse id,
+           entao é retornado o httpStatus NOT_FOUND, caso o usuario seja encontrado, exclui o usuario das listas
+           onde ele está armazenado e retorna um httpStatus 204 de NO_CONTENT.
+     */
 
     // METODO PUT - Essa rota utiliza o método alterarUsuario da classe de serviços de usuario, que permite que
     // possa ser utilizada também para alterar funcionarios e clientes
@@ -205,22 +257,55 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
         return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
     }
 
+    /*
+           Recebe um cpf pela url e um objeto usuario pelo body (em formato JSON), chama o método
+           AtualizarUsuario e passa esse cpf e as alterações por parametro, armazenando o resultado em
+           usuarioAtualizado. Se o usuarioAtualizado for nulo, ou seja, se nao existir um usuario com esse cpf,
+           entao é retornado o httpStatus NOT_FOUND, caso o usuario seja encontrado, retorna um json com o usuario
+           atualizado e o httpStatus de OK
+    */
+
 
     /*########################### ROTAS PARA MANIPULAR FUNCIONARIOS ########################3*/
 
+    // MÉTODO POST
     @PostMapping("/funcionarios")
+    /*
+         Para acessar a rota basta adicionar /funcionarios na rota padrão /admin
+          e definir o método como POST
+    */
     public ResponseEntity<Funcionario> adicionarFuncionario(Funcionario funcionario) {
         Funcionario novoFuncionario = usuariosService.adicionarFuncionario(funcionario);
         return new ResponseEntity<>(novoFuncionario, HttpStatus.CREATED);
     }
+    /*
+        O método recebe pelo body um novo funcionario, e utilizando a instancia
+        do servico de funcionarios, grava esse objeto na lista de funcionarios e retorna, através do
+        httpStatus, o status de criação de objetos, que é o 201.
+     */
 
+    // MÉTODO GET
     @GetMapping("/funcionarios")
+    /*
+         Para acessar a rota basta adicionar /funcionarios na rota padrão /admin
+          e definir o método como GET
+    */
     public ResponseEntity<List<Funcionario>> listarFuncionario() {
         List<Funcionario> funcionarios = usuariosService.listarFuncionarios();
         return new ResponseEntity<>(funcionarios, HttpStatus.OK);
     }
+    /*
+        chama o método listarFuncionarios e retorna para o usuario todos os funcionarios da lista,
+        juntamente com o httpStatus de OK, que é o 200
 
+     */
+
+    // MÉTODO GET
     @GetMapping("/funcionarios/{cpf}")
+    /*
+         Para acessar a rota basta adicionar /funcionarios/cpf do funcionario que seja buscar
+          na rota padrão /admin e definir o método como GET
+    */
     public ResponseEntity<Funcionario> buscarFuncionario(String cpf) {
         Funcionario funcionario = usuariosService.buscarFuncionario(cpf);
         if(funcionario == null){
@@ -229,5 +314,9 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
         return new ResponseEntity<>(funcionario, HttpStatus.OK);
     }
 
+    /*
+        chama o método buscarFuncionario, passando o cpf recebido pelo parâmetro e retorna o usuário com
+        o cpf correspondente, juntamente com o httpStatus de OK, que é o 200.
+     */
 
 }
