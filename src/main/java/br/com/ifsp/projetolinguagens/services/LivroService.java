@@ -39,7 +39,7 @@ public class LivroService {
     }
 
 
-    public Livro buscarLivro(Integer id){
+    public Livro buscarLivro(Integer id) {
         Livro livro = livros.stream()
                 .filter(l -> l.getId().equals(id))
                 .findFirst()
@@ -47,7 +47,6 @@ public class LivroService {
 
         if (livro == null) {
             throw new LivroExceptions(id);
-            //throw new LivroExceptions("Não foi possível encontrar um livro com o ID fornecido.");
         }
         return livro;
     }
@@ -66,16 +65,16 @@ public class LivroService {
 
     public void excluirLivro(Integer id) {
         boolean livroRemovido = livros.removeIf(l -> l.getId().equals(id));
-            if (!livroRemovido) {
-                throw new LivroExceptions(id);
-            }
+        if (!livroRemovido) {
+            throw new LivroExceptions(id);
+        }
     }
     // verificar
 
     public Livro alterarLivro(Integer id, Livro livro) {
         Livro livroAtualizado = buscarLivro(id);
         if (livroAtualizado == null) {
-            return null;
+            throw new LivroExceptions(id);
         }
 
         if (livro.getTitulo() == null) {
@@ -112,5 +111,37 @@ public class LivroService {
 
         return livroAtualizado;
     }
+
+    public Livro reservarLivro(Integer id) {
+        Livro livro = buscarLivro(id);
+        if (livro == null) {
+            throw new LivroExceptions(id);
+        }
+        if (livro.getNumExemplares() == 0) {
+            throw new LivroExceptions("Esse livro nao possui exemplares disponiveis.");
+        }
+        livro.decrementarExemplaresDisponiveis();
+        int index = livros.indexOf(livro);
+        if (index != -1) {
+            livros.set(index, livro);
+            return livro;
+        }
+        return null;
+    }
+
+    public Livro cancelarReserva(Integer id) {
+        Livro livro = buscarLivro(id);
+        if (livro == null) {
+            throw new LivroExceptions(id);
+        }
+        livro.incrementarExemplaresDisponiveis();
+        int index = livros.indexOf(livro);
+        if (index != -1) {
+            livros.set(index, livro);
+            return livro;
+        }
+        return null;
+    }
+
 }
 

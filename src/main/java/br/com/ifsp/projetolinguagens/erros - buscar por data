@@ -1,0 +1,42 @@
+//
+//    public static List<Emprestimo> listarEmprestimosPorData(Date dataEmprestimo) {
+//        List<Emprestimo> emprestimosPorData = new ArrayList<>();
+//        for (Emprestimo emprestimo : emprestimos) {
+//            if (emprestimo.getDataEmprestimo().compareTo(dataEmprestimo) == 0) {
+//                emprestimosPorData.add(emprestimo);
+//            }
+//        }
+//        return emprestimosPorData;
+//    }
+//
+//    public static List<Emprestimo> listarEmprestimosPorData(Date dataEmprestimo) {
+//        List<Emprestimo> emprestimosPorData = new ArrayList<>();
+//        for (Emprestimo emprestimo : emprestimos) {
+//            if (emprestimo.getDataEmprestimo().compareTo(dataEmprestimo) == 0) {
+//                emprestimosPorData.add(emprestimo);
+//            }
+//        }
+//        return emprestimosPorData;
+//    }
+//
+//    public static List<Emprestimo> listarEmprestimosPorDataEmprestimo(Date dataEmprestimo) {
+//        List<Emprestimo> emprestimosPorDataEmprestimo = new ArrayList<>();
+//        for (Emprestimo e : emprestimos) {
+//            if (e.getDataEmprestimo().equals(dataEmprestimo)) {
+//                emprestimosPorDataEmprestimo.add(e);
+//            }
+//        }
+//        return emprestimosPorDataEmprestimo;
+//    }
+//
+//    public static List<Emprestimo> listarEmprestimosPorDataEmprestimo(Date dataEmprestimo) {
+//        List<Emprestimo> emprestimosPorDataEmprestimo = new ArrayList<>();
+//        for (Emprestimo e : emprestimos) {
+//            Date emprestimoData = truncateTime(e.getDataEmprestimo());
+//            Date filtroData = truncateTime(dataEmprestimo);
+//            if (emprestimoData.equals(filtroData)) {
+//                emprestimosPorDataEmprestimo.add(e);
+//            }
+//        }
+//        return emprestimosPorDataEmprestimo;
+//    }

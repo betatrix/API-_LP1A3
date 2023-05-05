@@ -3,6 +3,8 @@ package br.com.ifsp.projetolinguagens.model;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.util.Objects;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -29,29 +31,19 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    public void emprestarLivro(Livro livro){
-        livro.emprestar();
-        //empresta um exemplar do livro
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(cpf, usuario.cpf) && Objects.equals(email, usuario.email);
     }
 
-    public void devolverLivro(Livro livro){
-        //devolve um exemplar do livro
-        livro.devolver();
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf, email);
     }
 
-    public void reservarLivro(Livro livro){
-        //reserva um livro
-        livro.decrementarExemplaresDisponiveis();
-        livro.setReservado(true);
-        // Podemos criar uma verificação para caso o numero de exemplares
-        // disponiveis seja 0, envie uma exceção,
-    }
-
-    public void cancelarReserva(Livro livro){
-        //cancela a reserva do livro
-        livro.incrementarExemplaresDisponiveis();
-        livro.setReservado(false);
-    }
 
     public String getNome() {
         return nome;

@@ -1,5 +1,6 @@
 package br.com.ifsp.projetolinguagens.services;
 
+import br.com.ifsp.projetolinguagens.exceptions.LivroExceptions;
 import br.com.ifsp.projetolinguagens.exceptions.UsuarioExceptions;
 import br.com.ifsp.projetolinguagens.model.Administrador;
 import br.com.ifsp.projetolinguagens.model.Cliente;
@@ -41,8 +42,8 @@ public class UsuariosService {
     /*  ADICIONA NOVOS OBJETOS NAS LISTAS */
 
     public Cliente adicionarCliente(Cliente cliente) {
-        if(cliente == null){
-            throw new UsuarioExceptions("O usuario enviado e nulo. Nao foi possível adicionar.");
+        if (clientes.contains(cliente)) {
+            throw new LivroExceptions("Nao foi possivel adicionar, esse cliente ja existe.");
         }
         usuarios.add(cliente);
         clientes.add(cliente);
@@ -50,8 +51,9 @@ public class UsuariosService {
     }
 
     public Funcionario adicionarFuncionario(Funcionario funcionario) {
-        if(funcionario == null){
-            throw new UsuarioExceptions("O funcionario enviado e nulo. Nao foi possivel adicionar.");
+        if (funcionarios.contains(funcionario)) {
+            throw new LivroExceptions("Nao foi possivel adicionar, ja existe um funcionario com esse cpf " +
+                    "e com esse email cadastrados.");
         }
         usuarios.add(funcionario);
         funcionarios.add(funcionario);
@@ -60,54 +62,85 @@ public class UsuariosService {
 
     /*  LISTA OS OBJETOS DAS LISTAS */
     public List<Usuario> listarUsuarios() {
+        if (usuarios.size() == 0) {
+            throw new UsuarioExceptions("Nao foi possivel listar, pois nao existem usuarios cadastrados.");
+        }
         return usuarios;
     }
 
+
     public List<Cliente> listarClientes() {
+        if (clientes.size() == 0) {
+            throw new UsuarioExceptions("Nao foi possivel listar, pois nao existem clientes cadastrados.");
+        }
         return clientes;
     }
 
+
     public List<Funcionario> listarFuncionarios() {
+        if (funcionarios.size() == 0) {
+            throw new UsuarioExceptions("Nao foi possivel listar, pois nao existem funcionarios cadastrados.");
+        }
         return funcionarios;
     }
 
+
     /*  BUSCA OS OBJETOS DAS LISTAS PELO CPF  */
 
+
     public static Usuario buscarUsuario(String cpf) {
-        return usuarios.stream()
+        Usuario usuario = usuarios.stream()
                 .filter(l -> l.getCpf().equals(cpf))
                 .findFirst()
                 .orElse(null);
+
+        if (usuario == null) {
+            throw new UsuarioExceptions("Não foi possível encontrar um usuario com o CPF fornecido.");
+        }
+        return usuario;
     }
 
+
     public static Cliente buscarCliente(String cpf) {
-        return clientes.stream()
+        Cliente cliente = clientes.stream()
                 .filter(l -> l.getCpf().equals(cpf))
                 .findFirst()
                 .orElse(null);
+
+        if (cliente == null) {
+            throw new UsuarioExceptions("Não foi possível encontrar um cliente com o CPF fornecido.");
+        }
+        return cliente;
     }
 
 
     public Funcionario buscarFuncionario(String cpf) {
-        return funcionarios.stream()
+        Funcionario funcionario = funcionarios.stream()
                 .filter(l -> l.getCpf().equals(cpf))
                 .findFirst()
                 .orElse(null);
+
+        if (funcionario == null) {
+            throw new UsuarioExceptions("Não foi possível encontrar um funcionario com o CPF fornecido.");
+        }
+        return funcionario;
     }
+
 
     /*  MÉTODO QUE VAI SER USADO EM BIBLIOTECA PARA BUSCAR USUARIO PELO NOME */
     public Usuario buscarUsuarioNome(String nome) {
-        return usuarios.stream()
+        Usuario usuario = usuarios.stream()
                 .filter(l -> l.getCpf().equals(nome))
                 .findFirst()
                 .orElse(null);
+        if (usuario == null) {
+            throw new UsuarioExceptions("Não foi possível encontrar um usuario com o nome fornecido.");
+        }
+        return usuario;
     }
 
 
 
-    /*  APAGA USUARIOS/CLIENTES/FUNCIONARIOS */
-
-    // MODIFICAÇÃO DO METODO PARA VERIFICAR QUE TIPO DE OBJETO É E APAGAR DA LISTA CORRESPONDENTE
 
     public void excluirUsuario(String cpf) {
         Usuario usuario = usuarios.stream().filter(u -> u.getCpf().equals(cpf)).findFirst().orElse(null);
@@ -119,17 +152,42 @@ public class UsuariosService {
                 funcionarios.remove(usuario);
             }
         }
+        if (usuario == null) {
+            throw new UsuarioExceptions("Nao existe um usuario com este CPF.");
+        }
     }
 
+
     /*  METODO PARA ATUALIZAR UM USUARIO GENERICO
-    *   ESSE MÉTODO ESTÁ RELACIONADO COM A MANIULAÇÃO DO JSON, FEITA NA CLASSE DO USUARIO,
-    *   SEM ISSO, O MÉTODO NÃO FUNCIONA
-    * */
+     *   ESSE MÉTODO ESTÁ RELACIONADO COM A MANIULAÇÃO DO JSON, FEITA NA CLASSE DO USUARIO,
+     *   SEM ISSO, O MÉTODO NÃO FUNCIONA
+     * */
     public <T extends Usuario> T atualizarUsuario(String cpf, T usuario) {
         Usuario usuarioAtualizado = buscarUsuario(cpf);
         if (usuarioAtualizado == null) {
             return null;
         }
+
+        if (usuario.getCpf() == null) {
+            throw new UsuarioExceptions("CPF nao pode ser nulo.");
+        }
+
+        if (usuario.getNome() == null) {
+            throw new UsuarioExceptions("Nome nao pode ser nulo.");
+        }
+
+        if (usuario.getEndereco() == null) {
+            throw new UsuarioExceptions("Endereço nao pode ser nulo");
+        }
+
+        if (usuario.getEmail() == null) {
+            throw new UsuarioExceptions("Email nao pode ser nulo");
+        }
+
+        if (usuario.getSenha() == null) {
+            throw new UsuarioExceptions("Senha nao pode ser nula.");
+        }
+
         int index = usuarios.indexOf(usuarioAtualizado);
         if (index != -1) {
             usuarios.set(index, usuario);
@@ -148,10 +206,7 @@ public class UsuariosService {
         }
         return null;
     }
-
-
 }
-
 
 
 

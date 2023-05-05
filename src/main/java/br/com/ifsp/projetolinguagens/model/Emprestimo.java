@@ -7,6 +7,7 @@ public class Emprestimo {
     private Usuario usuario;
     private Livro livro;
     private Date dataEmprestimo;
+    private Date dataDevolucaoPrevista;
     private Date dataDevolucao;
 
     public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucao) {
@@ -14,7 +15,27 @@ public class Emprestimo {
         this.usuario = usuario;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucaoPrevista = dataDevolucao;
+    }
+
+//    public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucao) {
+//        this.cliente = cliente;
+//        this.usuario = usuario;
+//        this.livro = livro;
+//        this.dataEmprestimo = dataEmprestimo;
+//        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+//        this.dataDevolucao = dataDevolucao;
+//    }
+
+    public void atualizarDataDevolucao(Date dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
+    }
+    public Date getDataDevolucaoPrevista() {
+        return dataDevolucaoPrevista;
+    }
+
+    public void setDataDevolucaoPrevista(Date dataDevolucaoPrevista) {
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
     public Cliente getCliente() {

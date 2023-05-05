@@ -1,10 +1,15 @@
 package br.com.ifsp.projetolinguagens.controller;
 
 import br.com.ifsp.projetolinguagens.dto.LoginDTO;
+import br.com.ifsp.projetolinguagens.exceptions.EmprestimosExceptions;
+import br.com.ifsp.projetolinguagens.exceptions.LivroExceptions;
+import br.com.ifsp.projetolinguagens.exceptions.UsuarioExceptions;
 import br.com.ifsp.projetolinguagens.model.*;
 import br.com.ifsp.projetolinguagens.services.EmprestimoService;
 import br.com.ifsp.projetolinguagens.services.LivroService;
 import br.com.ifsp.projetolinguagens.services.UsuariosService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -32,64 +37,101 @@ public class BibliotecaController {
 
     // Listar livros
     @GetMapping("/livros")
-    public ResponseEntity<List<Livro>> listarLivros() {
-        List<Livro> livros = livroService.listarLivros();
-        return new ResponseEntity<>(livros, HttpStatus.OK);
+    public ResponseEntity<?> listarLivros() {
+        try {
+            List<Livro> livros = livroService.listarLivros();
+            return new ResponseEntity<>(livros, HttpStatus.OK);
+        }catch (LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(l.getMessage());
+        }
     }
 
-    //buscar pelo id
+    //buscar livro pelo id
     @GetMapping("/livros/{id}")
-    public ResponseEntity<Livro> buscarLivro(@PathVariable Integer id) {
-        Livro livro = livroService.buscarLivro(id);
-        if (livro == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> buscarLivro(@PathVariable Integer id) {
+        try {
+            Livro livro = livroService.buscarLivro(id);
+            return new ResponseEntity<>(livro, HttpStatus.OK);
+        }catch (LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(l.getMessage());
         }
-        return new ResponseEntity<>(livro, HttpStatus.OK);
     }
 
     // Lista usuarios
     @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> listarUsuario() {
-        List<Usuario> usuarios = usuariosService.listarUsuarios();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    public ResponseEntity<?> listarUsuarios() {
+        try {
+            List<Usuario> usuarios = usuariosService.listarUsuarios();
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        }catch(UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(u.getMessage());
+        }
     }
 
     // buscar usuarios por nome
-    @GetMapping("/usuarios/{nome}")
-    public ResponseEntity<Usuario> buscarUsuario(@PathVariable String nome) {
-        Usuario usuario = usuariosService.buscarUsuarioNome(nome);
-        if(usuario == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/usuario/{nome}")
+    public ResponseEntity<?> buscarUsuario(@PathVariable String nome) {
+        try {
+            Usuario usuario = usuariosService.buscarUsuarioNome(nome);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        }catch(UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(u.getMessage());
         }
-        return new ResponseEntity<>(usuario, HttpStatus.OK);
+    }
+
+    // buscar usuario por cpf
+    @GetMapping("/usuario/{cpf}")
+    public ResponseEntity<?> buscarUsuarioCpf(@PathVariable String cpf) {
+        try {
+            Usuario usuario = usuariosService.buscarUsuario(cpf);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        }catch(UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(u.getMessage());
+        }
     }
 
     //Lista os clientes
     @GetMapping("/clientes")
-    public ResponseEntity<List<Cliente>> listarCliente() {
-        List<Cliente> clientes = usuariosService.listarClientes();
-        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    public ResponseEntity<?> listarCliente() {
+        try {
+            List<Cliente> clientes = usuariosService.listarClientes();
+            return new ResponseEntity<>(clientes, HttpStatus.OK);
+        }catch(UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(u.getMessage());
+        }
     }
 
     //Lista os funcionarios
     @GetMapping("/funcionarios")
-    public ResponseEntity<List<Funcionario>> listarFuncionario() {
-        List<Funcionario> funcionarios = usuariosService.listarFuncionarios();
-        return new ResponseEntity<>(funcionarios, HttpStatus.OK);
+    public ResponseEntity<?> listarFuncionario() {
+        try {
+            List<Funcionario> funcionarios = usuariosService.listarFuncionarios();
+            return new ResponseEntity<>(funcionarios, HttpStatus.OK);
+        }catch(UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(u.getMessage());
+        }
     }
 
 
-
-    @GetMapping("cliente/{cpfCliente}")
-    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorCpfCliente(@PathVariable String cpfCliente) {
-        List<Emprestimo> emprestimosPorCpfCliente = EmprestimoService.listarEmprestimosPorCpfCliente(cpfCliente);
-        return new ResponseEntity<>(emprestimosPorCpfCliente, HttpStatus.OK);
+    /*################################# EMPRESTIMOS ##########################################3*/
+    @GetMapping("/cliente/{cpfCliente}")
+    public ResponseEntity<?> listarEmprestimosPorCpfCliente(@PathVariable String cpfCliente) {
+        try {
+            List<Emprestimo> emprestimosPorCpfCliente = EmprestimoService.listarEmprestimosPorCpfCliente(cpfCliente);
+            return new ResponseEntity<>(emprestimosPorCpfCliente, HttpStatus.OK);
+        } catch (EmprestimosExceptions e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
-    @GetMapping("funcionario/{cpfFuncionario}")
-    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorCpfFuncionario(@PathVariable String cpfFuncionario) {
-        List<Emprestimo> emprestimosPorCpfFuncionario = EmprestimoService.listarEmprestimosPorCpfFuncionario(cpfFuncionario);
-        return new ResponseEntity<>(emprestimosPorCpfFuncionario, HttpStatus.OK);
+    @GetMapping("/funcionario/{cpfFuncionario}")
+    public ResponseEntity<?> listarEmprestimosPorCpfFuncionario(@PathVariable String cpfFuncionario) {
+        try {
+            List<Emprestimo> emprestimosPorCpfFuncionario = EmprestimoService.listarEmprestimosPorCpfFuncionario(cpfFuncionario);
+            return new ResponseEntity<>(emprestimosPorCpfFuncionario, HttpStatus.OK);
+        } catch (EmprestimosExceptions e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 //    @GetMapping("/data/{dataEmprestimo}")
@@ -139,46 +181,49 @@ public class BibliotecaController {
         return ResponseEntity.ok(emprestimos);
     }
 
-    @PostMapping("/usuario/login")
-    public ResponseEntity<Usuario> realizarLogin(@RequestBody LoginDTO loginDTO) {
-        String cpf = loginDTO.getCpf();
-        String senha = loginDTO.getSenha();
+    @GetMapping("/data/{data}")
+    public ResponseEntity<List<Emprestimo>> getData(@PathVariable String data) {
 
-        // Buscar o usuário com o CPF fornecido
-        Usuario usuario = usuariosService.buscarUsuario(cpf);
+        List<Emprestimo> emprestimos = emprestimoService.buscarPorData(LocalDate.parse(data));
 
-        // Verificar se o usuário existe e se a senha fornecida corresponde à senha do usuário
-        if (usuario != null && usuario.getSenha().equals(senha)) {
-            return ResponseEntity.ok().body(usuario);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(emprestimos);
+    }
+
+
+
+    @GetMapping("/emprestimos")
+    public ResponseEntity<?> listarEmprestimos() throws ParseException {
+        try {
+            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimos();
+            return ResponseEntity.ok(emprestimos);
+        } catch (EmprestimosExceptions e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
         }
     }
 
+
+    @PostMapping("/usuario/login")
+    public ResponseEntity<?> realizarLogin(@RequestBody LoginDTO loginDTO) {
+        String cpf = loginDTO.getCpf();
+        String senha = loginDTO.getSenha();
+        try {
+            // Buscar o usuário com o CPF fornecido
+            Usuario usuario = usuariosService.buscarUsuario(cpf);
+
+            // Verificar se o usuário existe e se a senha fornecida corresponde à senha do usuário
+            if (usuario != null && usuario.getSenha().equals(senha)) {
+                return ResponseEntity.ok().body(usuario);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (UsuarioExceptions u) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(u.getMessage());
+        }
+    }
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //@GetMapping("/login/usuario")
 
 
 

@@ -1,5 +1,7 @@
 package br.com.ifsp.projetolinguagens.controller;
 
+import br.com.ifsp.projetolinguagens.exceptions.LivroExceptions;
+import br.com.ifsp.projetolinguagens.exceptions.UsuarioExceptions;
 import br.com.ifsp.projetolinguagens.interfaces.GerenciamentoDeFuncionarios;
 import br.com.ifsp.projetolinguagens.interfaces.GerenciamentoDeUsuarios;
 import br.com.ifsp.projetolinguagens.model.Cliente;
@@ -42,9 +44,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
     */
 
 
-    public ResponseEntity<Livro> adicionarLivro(@RequestBody Livro livro) {
-        Livro livroAdicionado = livroService.adicionarLivro(livro);
-        return new ResponseEntity<>(livroAdicionado, HttpStatus.CREATED);
+    public ResponseEntity<?> adicionarLivro(@RequestBody Livro livro) {
+        try {
+            Livro livroAdicionado = livroService.adicionarLivro(livro);
+            return new ResponseEntity<>(livroAdicionado, HttpStatus.CREATED);
+        }catch(LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(l.getMessage());
+        }
     }
     /*
         O método recebe pelo body um novo livro, e utilizando a instancia
@@ -60,9 +66,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /livros na rota padrão /admin
           e definir o método como GET
     */
-    public ResponseEntity<List<Livro>> listarLivros() {
-        List<Livro> livros = livroService.listarLivros();
-        return new ResponseEntity<>(livros, HttpStatus.OK);
+    public ResponseEntity<?> listarLivros() {
+        try {
+            List<Livro> livros = livroService.listarLivros();
+            return new ResponseEntity<>(livros, HttpStatus.OK);
+        }catch (LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(l.getMessage());
+        }
     }
 
     /*
@@ -77,12 +87,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /livros/id do livro que deseja listar na rota padrão /admin
           e definir o método como GET
     */
-    public ResponseEntity<Livro> buscarLivro(@PathVariable Integer id) {
-        Livro livro = livroService.buscarLivro(id);
-        if (livro == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> buscarLivro(@PathVariable Integer id) {
+        try {
+            Livro livro = livroService.buscarLivro(id);
+            return new ResponseEntity<>(livro, HttpStatus.OK);
+        }catch (LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(l.getMessage());
         }
-        return new ResponseEntity<>(livro, HttpStatus.OK);
     }
     /*
            Recebe um id pela url, chama o método buscarLivro e passa esse id por parametro e armazena
@@ -99,13 +110,14 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /livros/id do livro que seja excluir
           na rota padrão /admin e definir o método como DELETE
     */
-    public ResponseEntity<Void> excluirLivro(@PathVariable Integer id) {
-        Livro livro = livroService.buscarLivro(id);
-        if (livro == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> excluirLivro(@PathVariable Integer id) {
+        try {
+            Livro livro = livroService.buscarLivro(id);
+            livroService.excluirLivro(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(l.getMessage());
         }
-        livroService.excluirLivro(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
      /*
            Recebe um id pela url, chama o método buscarLivro e passa esse id por parametro e armazena
@@ -122,12 +134,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /livros/id do livro que seja alterar
           na rota padrão /admin e definir o método como DELETE
     */
-    public ResponseEntity<Livro> alterarLivro(@PathVariable Integer id, @RequestBody Livro livro) {
-        Livro livroAtualizado = livroService.alterarLivro(id, livro);
-        if (livroAtualizado == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> alterarLivro(@PathVariable Integer id, @RequestBody Livro livro) {
+        try {
+            Livro livroAtualizado = livroService.alterarLivro(id, livro);
+            return new ResponseEntity<>(livroAtualizado, HttpStatus.OK);
+        }catch (LivroExceptions l){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(l.getMessage());
         }
-        return new ResponseEntity<>(livroAtualizado, HttpStatus.OK);
     }
     /*
            Recebe um id pela url e um objeto livro pelo body (em formato JSON), chama o método
@@ -147,9 +160,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /clientes
           na rota padrão /admin e definir o método como POST para adicionar um cliente
     */
-    public ResponseEntity<Cliente> adicionarCliente(@RequestBody Cliente cliente) {
-        Cliente novoCliente = usuariosService.adicionarCliente(cliente);
-        return new ResponseEntity<>(novoCliente, HttpStatus.CREATED);
+    public ResponseEntity<?> adicionarCliente(@RequestBody Cliente cliente) {
+        try {
+            Cliente novoCliente = usuariosService.adicionarCliente(cliente);
+            return new ResponseEntity<>(novoCliente, HttpStatus.CREATED);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(u.getMessage());
+        }
     }
 
     /*
@@ -167,9 +184,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /usuarios
           na rota padrão /admin e definir o método como GET para listar os clientes
     */
-    public ResponseEntity<List<Usuario>> listarUsuario() {
-        List<Usuario> usuarios = usuariosService.listarUsuarios();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    public ResponseEntity<?> listarUsuario() {
+        try {
+            List<Usuario> usuarios = usuariosService.listarUsuarios();
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(u.getMessage());
+        }
     }
     /*
     *   Cria uma lista de usuarios a qual será atribuída a lista de usuarios armazenados, que será
@@ -181,9 +202,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /clientes
           na rota padrão /admin e definir o método como GET para listar os clientes
     */
-    public ResponseEntity<List<Cliente>> listarCliente() {
-        List<Cliente> clientes = usuariosService.listarClientes();
-        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    public ResponseEntity<?> listarCliente() {
+        try {
+            List<Cliente> clientes = usuariosService.listarClientes();
+            return new ResponseEntity<>(clientes, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(u.getMessage());
+        }
     }
     /*
     *   /*
@@ -199,12 +224,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
           na rota padrão /admin e definir o método como GET para listar o usuario com aquele
           cpf
     */
-    public ResponseEntity<Usuario> buscarUsuario(@PathVariable String cpf) {
-        Usuario usuario = usuariosService.buscarUsuario(cpf);
-        if (usuario == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> buscarUsuario(@PathVariable String cpf) {
+        try {
+            Usuario usuario = usuariosService.buscarUsuario(cpf);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(u.getMessage());
         }
-        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
     /*
            Recebe um cpf pela url da requisição, chama o método buscarUsuario e passa esse id por parametro e
@@ -219,24 +245,26 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
           na rota padrão /admin e definir o método como GET para listar o cliente com aquele
           cpf
     */
-    public ResponseEntity<Cliente> buscarCliente(String cpf) {
-        Cliente cliente = usuariosService.buscarCliente(cpf);
-        if (cliente == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> buscarCliente(String cpf) {
+        try {
+            Cliente cliente = usuariosService.buscarCliente(cpf);
+            return new ResponseEntity<>(cliente, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(u.getMessage());
         }
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
 
     // METODO DELETE - ESSE METODO É VALIDO PARA TODOS QUE EXTENDEM USUARIO
     @DeleteMapping("/usuarios/{cpf}")
-    public ResponseEntity<Void> excluirUsuario(@PathVariable String cpf) {
-        Usuario usuario = usuariosService.buscarUsuario(cpf);
-        if (usuario == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> excluirUsuario(@PathVariable String cpf) {
+        try {
+            Usuario usuario = usuariosService.buscarUsuario(cpf);
+            usuariosService.excluirUsuario(cpf);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(u.getMessage());
         }
-        usuariosService.excluirUsuario(cpf);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
      /*
@@ -249,12 +277,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
     // METODO PUT - Essa rota utiliza o método alterarUsuario da classe de serviços de usuario, que permite que
     // possa ser utilizada também para alterar funcionarios e clientes
     @PutMapping("/usuarios/{cpf}")
-    public ResponseEntity<Usuario> alterarUsuario(@PathVariable String cpf, @RequestBody Usuario usuario) {
-        Usuario usuarioAtualizado = usuariosService.atualizarUsuario(cpf, usuario);
-        if(usuarioAtualizado == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> alterarUsuario(@PathVariable String cpf, @RequestBody Usuario usuario) {
+        try {
+            Usuario usuarioAtualizado = usuariosService.atualizarUsuario(cpf, usuario);
+            return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(u.getMessage());
         }
-        return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
     }
 
     /*
@@ -274,9 +303,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /funcionarios na rota padrão /admin
           e definir o método como POST
     */
-    public ResponseEntity<Funcionario> adicionarFuncionario(Funcionario funcionario) {
-        Funcionario novoFuncionario = usuariosService.adicionarFuncionario(funcionario);
-        return new ResponseEntity<>(novoFuncionario, HttpStatus.CREATED);
+    public ResponseEntity<?> adicionarFuncionario(Funcionario funcionario) {
+        try {
+            Funcionario novoFuncionario = usuariosService.adicionarFuncionario(funcionario);
+            return new ResponseEntity<>(novoFuncionario, HttpStatus.CREATED);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(u.getMessage());
+        }
     }
     /*
         O método recebe pelo body um novo funcionario, e utilizando a instancia
@@ -290,9 +323,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /funcionarios na rota padrão /admin
           e definir o método como GET
     */
-    public ResponseEntity<List<Funcionario>> listarFuncionario() {
-        List<Funcionario> funcionarios = usuariosService.listarFuncionarios();
-        return new ResponseEntity<>(funcionarios, HttpStatus.OK);
+    public ResponseEntity<?> listarFuncionario() {
+        try {
+            List<Funcionario> funcionarios = usuariosService.listarFuncionarios();
+            return new ResponseEntity<>(funcionarios, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(u.getMessage());
+        }
     }
     /*
         chama o método listarFuncionarios e retorna para o usuario todos os funcionarios da lista,
@@ -306,12 +343,13 @@ public class AdministradorController implements GerenciamentoDeLivros, Gerenciam
          Para acessar a rota basta adicionar /funcionarios/cpf do funcionario que seja buscar
           na rota padrão /admin e definir o método como GET
     */
-    public ResponseEntity<Funcionario> buscarFuncionario(String cpf) {
-        Funcionario funcionario = usuariosService.buscarFuncionario(cpf);
-        if(funcionario == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> buscarFuncionario(String cpf) {
+        try {
+            Funcionario funcionario = usuariosService.buscarFuncionario(cpf);
+            return new ResponseEntity<>(funcionario, HttpStatus.OK);
+        }catch (UsuarioExceptions u){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(u.getMessage());
         }
-        return new ResponseEntity<>(funcionario, HttpStatus.OK);
     }
 
     /*

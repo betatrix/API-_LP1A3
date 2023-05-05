@@ -5,11 +5,4 @@ public class Funcionario extends Usuario{
         super(nome, cpf, endereco, email, senha);
     }
 
-    public void realizarEmprestimo(Emprestimo emprestimo){
-        //realiza um novo emprestimo
-    }
-
-    public void realizarDevolucao(Emprestimo emprestimo){
-        //realiza uma devolucao
-    }
 }

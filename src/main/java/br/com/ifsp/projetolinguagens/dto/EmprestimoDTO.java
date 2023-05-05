@@ -8,16 +8,34 @@ public class EmprestimoDTO {
     private String cpfCliente;
     private String cpfFuncionario;
     private Date dataEmprestimo;
+    private Date dataDevolucaoPrevista;
     private Date dataDevolucao;
 
-    public EmprestimoDTO(Integer iDlivro, String cpfCliente, String cpfFuncionario, Date dataEmprestimo, Date dataDevolucao) {
+
+
+    public EmprestimoDTO(Integer iDlivro, String cpfCliente, String cpfFuncionario, Date dataEmprestimo, Date dataDevolucaoPrevista) {
         this.iDlivro = iDlivro;
         this.cpfCliente = cpfCliente;
         this.cpfFuncionario = cpfFuncionario;
         this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataDevolucao;
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
+//    public EmprestimoDTO(Integer iDlivro, String cpfCliente, String cpfFuncionario, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucao) {
+//        this.iDlivro = iDlivro;
+//        this.cpfCliente = cpfCliente;
+//        this.cpfFuncionario = cpfFuncionario;
+//        this.dataEmprestimo = dataEmprestimo;
+//        this.dataDevolucaoPrevista = dataDevolucao;
+//        this.dataDevolucao = dataDevolucao;
+//    }
+    public Date getDataDevolucaoPrevista() {
+        return dataDevolucaoPrevista;
+    }
+
+    public void setDataDevolucaoPrevista(Date dataDevolucaoPrevista) {
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+    }
     public Integer getiDlivro() {
         return iDlivro;
     }

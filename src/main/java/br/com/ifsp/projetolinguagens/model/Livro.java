@@ -28,19 +28,6 @@ public class Livro {
         this.reservado = reservado;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Livro livro = (Livro) o;
-        return anoPublicacao == livro.anoPublicacao && numExemplares == livro.numExemplares && numExemplaresDisponiveis == livro.numExemplaresDisponiveis && Objects.equals(id, livro.id) && Objects.equals(titulo, livro.titulo) && Objects.equals(autor, livro.autor) && Objects.equals(editora, livro.editora);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, titulo, autor, editora, anoPublicacao, numExemplares, numExemplaresDisponiveis);
-    }
-
     // método responsável por decrementar o numero de exemplares
     // disponiveis, em caso de emprestimo ou reserva de livros
     public void decrementarExemplaresDisponiveis(){
@@ -53,16 +40,18 @@ public class Livro {
         this.numExemplaresDisponiveis++;
     }
 
-    public void emprestar(){
-        //emprestimo de livros
-        decrementarExemplaresDisponiveis();
-        //Podemos criar uma verificação para caso o numero de exemplares
-        // disponiveis seja 0, envie uma exceção
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Livro livro = (Livro) o;
+        return Objects.equals(id, livro.id);
     }
 
-    public void devolver(){
-        //devolucao de livros
-        incrementarExemplaresDisponiveis();
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public Integer getId() {
