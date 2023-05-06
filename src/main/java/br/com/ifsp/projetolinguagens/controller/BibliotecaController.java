@@ -35,7 +35,7 @@ public class BibliotecaController {
     @Autowired
     private EmprestimoService emprestimoService;
 
-    // Listar livros
+    /*###################################   LIVROS  ############################################*/
     @GetMapping("/livros")
     public ResponseEntity<?> listarLivros() {
         try {
@@ -57,6 +57,7 @@ public class BibliotecaController {
         }
     }
 
+    /*####################################  USUARIOS    ###################################################*/
     // Lista usuarios
     @GetMapping("/usuarios")
     public ResponseEntity<?> listarUsuarios() {
@@ -114,6 +115,8 @@ public class BibliotecaController {
 
 
     /*################################# EMPRESTIMOS ##########################################3*/
+
+    // LISTA EMPRESTIMOS POR CLIENTE
     @GetMapping("/cliente/{cpfCliente}")
     public ResponseEntity<?> listarEmprestimosPorCpfCliente(@PathVariable String cpfCliente) {
         try {
@@ -124,6 +127,7 @@ public class BibliotecaController {
         }
     }
 
+    // LISTA EMPRESTIMOS POR FUNCIONARIO
     @GetMapping("/funcionario/{cpfFuncionario}")
     public ResponseEntity<?> listarEmprestimosPorCpfFuncionario(@PathVariable String cpfFuncionario) {
         try {
@@ -134,63 +138,18 @@ public class BibliotecaController {
         }
     }
 
-//    @GetMapping("/data/{dataEmprestimo}")
-//    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorData(@PathVariable Date data) {
-//        List<Emprestimo> emprestimosPorData = EmprestimoService.listarEmprestimosPorData(data);
-//        return new ResponseEntity<>(emprestimosPorData, HttpStatus.OK);
-//    }
-
-//    @GetMapping("/data/{dataEmprestimo}")
-//    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorData(@PathVariable String dataEmprestimo) {
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        try {
-//            Date data = dateFormat.parse(dataEmprestimo);
-//            List<Emprestimo> emprestimosPorData = EmprestimoService.listarEmprestimosPorData(data);
-//            return new ResponseEntity<>(emprestimosPorData, HttpStatus.OK);
-//        } catch (java.text.ParseException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-
-//    @GetMapping("dataEmprestimo/{dataEmprestimo}")
-//    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorDataEmprestimo(@PathVariable Date dataEmprestimo) {
-//        List<Emprestimo> emprestimosPorDataEmprestimo = EmprestimoService.listarEmprestimosPorDataEmprestimo(dataEmprestimo);
-//        return new ResponseEntity<>(emprestimosPorDataEmprestimo, HttpStatus.OK);
-//    }
-
-    //Precisa arrumar
-//    @GetMapping("dataEmprestimo/{dataEmprestimo}")
-//    public ResponseEntity<List<Emprestimo>> buscarEmprestimoPorData(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEmprestimo) {
-//        List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorDataEmprestimo(dataEmprestimo);
-//        return ResponseEntity.ok().body(emprestimos);
-//    }
-
-//    @GetMapping("/dataEmprestimo")
-//    public ResponseEntity<List<Emprestimo>> buscarEmprestimoPorData(@RequestBody String dataEmprestimo) {
-//        try {
-//            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dataEmprestimo);
-//            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorDataEmprestimo(date);
-//            return ResponseEntity.ok().body(emprestimos);
-//        } catch (java.text.ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
+    // LISTA EMPRESTIMOS POR DATA
     @GetMapping("/emprestimo/{data}")
-    public ResponseEntity<List<Emprestimo>> buscarPorData(@PathVariable String data) throws ParseException {
-        List<Emprestimo> emprestimos = emprestimoService.buscarPorData(data);
-        return ResponseEntity.ok(emprestimos);
+    public ResponseEntity<?> getData(@PathVariable String data) {
+        try {
+            List<Emprestimo> emprestimos = emprestimoService.buscarPorData(LocalDate.parse(data));
+            return ResponseEntity.ok(emprestimos);
+        } catch (EmprestimosExceptions e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    @GetMapping("/data/{data}")
-    public ResponseEntity<List<Emprestimo>> getData(@PathVariable String data) {
-
-        List<Emprestimo> emprestimos = emprestimoService.buscarPorData(LocalDate.parse(data));
-
-        return ResponseEntity.ok(emprestimos);
-    }
-
-
-
+    // LISTA TODOS OS EMPRESTIMOS FEITOS
     @GetMapping("/emprestimos")
     public ResponseEntity<?> listarEmprestimos() throws ParseException {
         try {
@@ -201,6 +160,7 @@ public class BibliotecaController {
         }
     }
 
+    /*########################################  LOGIN   ###################################################*/
 
     @PostMapping("/usuario/login")
     public ResponseEntity<?> realizarLogin(@RequestBody LoginDTO loginDTO) {

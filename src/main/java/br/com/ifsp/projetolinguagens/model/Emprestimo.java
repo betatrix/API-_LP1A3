@@ -1,24 +1,50 @@
 package br.com.ifsp.projetolinguagens.model;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 public class Emprestimo {
+    private Integer idEmp;
     private Cliente cliente;
     private Usuario usuario;
     private Livro livro;
-    private Date dataEmprestimo;
-    private Date dataDevolucaoPrevista;
-    private Date dataDevolucao;
+    private LocalDate dataEmprestimo;
+    private LocalDate dataDevolucaoPrevista;
+    private boolean devolvido = false;
 
-    public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucao) {
+    public Emprestimo(Integer idEmp , Cliente cliente, Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevista) {
+        this.idEmp = idEmp;
         this.cliente = cliente;
         this.usuario = usuario;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucaoPrevista = dataDevolucao;
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+        //this.devolvido = devolvido;
     }
 
-//    public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucao) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Emprestimo that = (Emprestimo) o;
+        return Objects.equals(idEmp, that.idEmp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idEmp);
+    }
+
+    public Integer getIdEmp() {
+        return idEmp;
+    }
+
+    public void setIdEmp(Integer idEmp) {
+        this.idEmp = idEmp;
+    }
+
+    //    public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucao) {
 //        this.cliente = cliente;
 //        this.usuario = usuario;
 //        this.livro = livro;
@@ -27,14 +53,12 @@ public class Emprestimo {
 //        this.dataDevolucao = dataDevolucao;
 //    }
 
-    public void atualizarDataDevolucao(Date dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
-    public Date getDataDevolucaoPrevista() {
+
+    public LocalDate getDataDevolucaoPrevista() {
         return dataDevolucaoPrevista;
     }
 
-    public void setDataDevolucaoPrevista(Date dataDevolucaoPrevista) {
+    public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
@@ -62,19 +86,20 @@ public class Emprestimo {
         this.livro = livro;
     }
 
-    public Date getDataEmprestimo() {
+    public LocalDate getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(Date dataEmprestimo) {
+    public void setDataEmprestimo(LocalDate dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public Date getDataDevolucao() {
-        return dataDevolucao;
+
+    public boolean isDevolvido() {
+        return devolvido;
     }
 
-    public void setDataDevolucao(Date dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
+    public void setDevolvido(boolean devolvido) {
+        this.devolvido = devolvido;
     }
 }

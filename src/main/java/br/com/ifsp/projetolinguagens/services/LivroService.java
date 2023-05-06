@@ -143,5 +143,19 @@ public class LivroService {
         return null;
     }
 
+    public Livro devolverLivro(Integer id){
+        Livro livro = buscarLivro(id);
+        if (livro == null) {
+            throw new LivroExceptions(id);
+        }
+        livro.incrementarExemplaresDisponiveis();
+        int index = livros.indexOf(livro);
+        if (index != -1) {
+            livros.set(index, livro);
+            return livro;
+        }
+        return null;
+    }
+
 }
 

@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/usuario")
@@ -30,7 +30,9 @@ public class UsuarioController {
     @Autowired
     private EmprestimoService emprestimoService;
 
-    //Reservar livros
+    /*###########################################   LIVROS  ############################################*/
+
+    //RESERVAR LIVRO
     @PostMapping("/reservarLivro")
     public ResponseEntity<?> reservarLivro(@PathVariable Integer idlivro){
         try {
@@ -41,6 +43,7 @@ public class UsuarioController {
         }
     }
 
+    //CANCELAR RESERVA DE LIVRO
     @PostMapping("/cancelarReservar")
     public ResponseEntity<?> cancelarReserva(@PathVariable Integer idLivro){
         try{
@@ -51,21 +54,23 @@ public class UsuarioController {
         }
     }
 
+    /*                          REALIZAR EMPRESTIMO E DEVOLVER LIVRO           */
+
+    // FAZER EMPRESTIMO DE LIVRO
     @PostMapping("/emprestimo")
     public ResponseEntity<?> RealizarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
         try {
+            Integer idEmp = emprestimoDTO.getIdEmp();
             String cpfcliente = emprestimoDTO.getCpfCliente();
             String cpffunc = emprestimoDTO.getCpfFuncionario();
             Integer idlivro = emprestimoDTO.getiDlivro();
-            Date dataEmprestimo = emprestimoDTO.getDataEmprestimo();
-            Date dataDevolucao = emprestimoDTO.getDataDevolucao();
-            Date dataDevolucaoPrevista = emprestimoDTO.getDataDevolucaoPrevista();
-
+            LocalDate dataEmprestimo = emprestimoDTO.getDataEmprestimo();
+            LocalDate dataDevolucaoPrevista = emprestimoDTO.getDataDevolucaoPrevista();
             Cliente cliente = usuariosService.buscarCliente(cpfcliente);
             Funcionario funcionario = usuariosService.buscarFuncionario(cpffunc);
             Livro livro = livroService.buscarLivro(idlivro);
 
-            Emprestimo emp = new Emprestimo(cliente, funcionario, livro, dataEmprestimo, dataDevolucaoPrevista);
+            Emprestimo emp = new Emprestimo(idEmp, cliente, funcionario, livro, dataEmprestimo, dataDevolucaoPrevista);
 
             Emprestimo novoEmprestimo = EmprestimoService.realizarEmprestimo(emp);
 
@@ -75,8 +80,15 @@ public class UsuarioController {
         }
     }
 
-
-
-
+    // DEVOLVER LIVRO
+    @PutMapping("/devolver/{idEmp}")
+    public ResponseEntity<?> devolverLivro(@PathVariable Integer idEmp){
+        try {
+            Emprestimo emprestimoDevolvido = emprestimoService.atualizarEmprestimo(idEmp);
+            return new ResponseEntity<>(emprestimoDevolvido, HttpStatus.OK);
+        }catch (EmprestimosExceptions e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 }
