@@ -26,13 +26,14 @@ import java.util.List;
 public class AdministradorController implements GerenciamentoDeLivros, GerenciamentoDeUsuarios, GerenciamentoDeFuncionarios {
 
     /*
-     Essa classe pode realizar o CRUD nos livros e nos Clientes/Usuarios, e também consegue listar os funcionarios
+     Essa classe pode realizar o CRUD nos livros e nos Clientes/Usuarios, e também consegue manipular os funcionarios
     * */
 
     // Faz a injeção das dependências do serviço 'Livro Service' para que seja possível usar os métodos CRUD
     @Autowired
     private LivroService livroService;
 
+    // Faz a injeção das dependências do serviço 'Usuario Service' para que seja possível usar os métodos CRUD
     @Autowired
     private UsuariosService usuariosService;
 

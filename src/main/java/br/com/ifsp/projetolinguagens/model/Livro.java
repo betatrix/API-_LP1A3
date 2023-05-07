@@ -14,9 +14,6 @@ public class Livro {
     private boolean reservado = false;
 
 
-    public Livro(Integer id) {
-        this.id = id;
-    }
     public Livro(Integer id, String titulo, String autor, String editora, int anoPublicacao, int numExemplares, int numExemplaresDisponiveis, boolean reservado) {
         this.id = id;
         this.titulo = titulo;

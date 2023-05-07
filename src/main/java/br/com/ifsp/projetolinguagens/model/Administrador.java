@@ -1,6 +1,5 @@
 package br.com.ifsp.projetolinguagens.model;
 
-import br.com.ifsp.projetolinguagens.controller.AdministradorController;
 
 public class Administrador extends Usuario{
 

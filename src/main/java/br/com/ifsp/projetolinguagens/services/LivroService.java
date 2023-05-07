@@ -15,8 +15,8 @@ public class LivroService {
     //Cria algumas instâncias de livros quando o programa é executado para facilitar a visualizacao
 
     {
-        Livro livro1 = new Livro(1, "O Senhor dos Anéis", "J.R.R. Tolkien", "tralala", 1990, 20, 20, false);
-        Livro livro2 = new Livro(2, "Harry Potter e a Pedra Filosofal", "J.K. Rowling", "tralalaaaa", 1997, 30, 10, true);
+        Livro livro1 = new Livro(1, "O Senhor dos Anéis", "J.R.R. Tolkien", "Companhia das Letras", 1990, 20, 20, false);
+        Livro livro2 = new Livro(2, "Harry Potter e a Pedra Filosofal", "J.K. Rowling", "DarkSide", 1997, 30, 10, true);
         livros.add(livro1);
         livros.add(livro2);
     }
@@ -51,7 +51,7 @@ public class LivroService {
         return livro;
     }
 /* O método recebe o id do livro que estamos buscando, depois disso é criada uma instância de livro ao
-    qual será atribuído o livro correspondente. O método stream() do objeto livros para criar um fluxo
+    qual será atribuído o livro correspondente. O método stream() do objeto livros cria um fluxo
     de objetos Livro e o método filter() restringe o fluxo apenas aos objetos Livro que têm o mesmo ID
     que o valor do parâmetro id.
     O método findFirst() é usado para retornar o primeiro objeto Livro que atende aos critérios definidos
@@ -71,6 +71,7 @@ public class LivroService {
     }
     // verificar
 
+    // testar
     public Livro alterarLivro(Integer id, Livro livro) {
         Livro livroAtualizado = buscarLivro(id);
         if (livroAtualizado == null) {
@@ -109,6 +110,11 @@ public class LivroService {
         livroAtualizado.setNumExemplaresDisponiveis(livro.getNumExemplaresDisponiveis());
         livroAtualizado.setReservado(livro.isReservado());
 
+        int index = livros.indexOf(livroAtualizado);
+        if (index != -1) {
+            livros.set(index, livroAtualizado);
+        }
+
         return livroAtualizado;
     }
 
@@ -121,6 +127,8 @@ public class LivroService {
             throw new LivroExceptions("Esse livro nao possui exemplares disponiveis.");
         }
         livro.decrementarExemplaresDisponiveis();
+        livro.setReservado(true);
+
         int index = livros.indexOf(livro);
         if (index != -1) {
             livros.set(index, livro);
@@ -135,6 +143,8 @@ public class LivroService {
             throw new LivroExceptions(id);
         }
         livro.incrementarExemplaresDisponiveis();
+        livro.setReservado(false);
+
         int index = livros.indexOf(livro);
         if (index != -1) {
             livros.set(index, livro);

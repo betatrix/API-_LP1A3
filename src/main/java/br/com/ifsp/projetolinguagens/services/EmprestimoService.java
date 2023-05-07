@@ -105,6 +105,10 @@ public class EmprestimoService {
                 .findFirst()
                 .orElse(null);
 
+        if(emprestimo == null){
+            throw new EmprestimosExceptions("Nao existe um emprestimo com esse ID");
+        }
+
         return emprestimo;
     }
 
@@ -125,10 +129,6 @@ public class EmprestimoService {
         }
         return emprestimoAtualizado;
     }
-
-
-
-
 
 
 }

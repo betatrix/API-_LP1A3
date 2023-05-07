@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface GerenciamentoDeUsuarios {
     // Método Post
-
-   //  ResponseEntity<Usuario> adicionarUsuario(@RequestBody Usuario usuario);
-
     ResponseEntity<?> adicionarCliente(@RequestBody Cliente cliente);
 
 
@@ -32,5 +29,4 @@ public interface GerenciamentoDeUsuarios {
     // Método PUT
     <T extends Usuario> ResponseEntity<T> alterarUsuario(@PathVariable String cpf, @RequestBody T usuario);
 
-    //ResponseEntity<Usuario> alterarUsuario(@PathVariable String cpf, @RequestBody Usuario usuario);
 }

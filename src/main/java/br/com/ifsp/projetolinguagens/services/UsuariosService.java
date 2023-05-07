@@ -127,10 +127,12 @@ public class UsuariosService {
     }
 
 
+    // testar
+
     /*  MÉTODO QUE VAI SER USADO EM BIBLIOTECA PARA BUSCAR USUARIO PELO NOME */
     public Usuario buscarUsuarioNome(String nome) {
         Usuario usuario = usuarios.stream()
-                .filter(l -> l.getCpf().equals(nome))
+                .filter(l -> l.getNome().equals(nome))
                 .findFirst()
                 .orElse(null);
         if (usuario == null) {
@@ -138,7 +140,6 @@ public class UsuariosService {
         }
         return usuario;
     }
-
 
 
 

@@ -1,7 +1,6 @@
 package br.com.ifsp.projetolinguagens.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 public class Emprestimo {
@@ -20,7 +19,6 @@ public class Emprestimo {
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
-        //this.devolvido = devolvido;
     }
 
     @Override
@@ -43,15 +41,6 @@ public class Emprestimo {
     public void setIdEmp(Integer idEmp) {
         this.idEmp = idEmp;
     }
-
-    //    public Emprestimo(Cliente cliente, Usuario usuario, Livro livro, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucao) {
-//        this.cliente = cliente;
-//        this.usuario = usuario;
-//        this.livro = livro;
-//        this.dataEmprestimo = dataEmprestimo;
-//        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
-//        this.dataDevolucao = dataDevolucao;
-//    }
 
 
     public LocalDate getDataDevolucaoPrevista() {

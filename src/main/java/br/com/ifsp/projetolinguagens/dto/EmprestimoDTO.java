@@ -1,7 +1,6 @@
 package br.com.ifsp.projetolinguagens.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class EmprestimoDTO {
 
@@ -14,7 +13,6 @@ public class EmprestimoDTO {
     private boolean devolvido = false;
 
 
-
     public EmprestimoDTO(Integer idEmp, Integer iDlivro, String cpfCliente, String cpfFuncionario, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevista) {
         this.idEmp = idEmp;
         this.iDlivro = iDlivro;
@@ -22,17 +20,8 @@ public class EmprestimoDTO {
         this.cpfFuncionario = cpfFuncionario;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
-        //this.devolvido = devolvido;
     }
 
-//    public EmprestimoDTO(Integer iDlivro, String cpfCliente, String cpfFuncionario, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucao) {
-//        this.iDlivro = iDlivro;
-//        this.cpfCliente = cpfCliente;
-//        this.cpfFuncionario = cpfFuncionario;
-//        this.dataEmprestimo = dataEmprestimo;
-//        this.dataDevolucaoPrevista = dataDevolucao;
-//        this.dataDevolucao = dataDevolucao;
-//    }
     public LocalDate getDataDevolucaoPrevista() {
         return dataDevolucaoPrevista;
     }

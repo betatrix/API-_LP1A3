@@ -53,7 +53,6 @@ public class FuncionarioController implements GerenciamentoDeLivros, Gerenciamen
             LocalDate dataEmprestimo = emprestimoDTO.getDataEmprestimo();
             LocalDate dataDevolucaoPrevista = emprestimoDTO.getDataDevolucaoPrevista();
 
-
             Cliente cliente = usuariosService.buscarCliente(cpfcliente);
             Funcionario funcionario = usuariosService.buscarFuncionario(cpffunc);
             Livro livro = livroService.buscarLivro(idlivro);

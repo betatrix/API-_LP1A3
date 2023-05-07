@@ -29,6 +29,7 @@ public class BibliotecaController {
 
     @Autowired
     private LivroService livroService;
+
     @Autowired
     private UsuariosService usuariosService;
 
@@ -140,7 +141,7 @@ public class BibliotecaController {
 
     // LISTA EMPRESTIMOS POR DATA
     @GetMapping("/emprestimo/{data}")
-    public ResponseEntity<?> getData(@PathVariable String data) {
+    public ResponseEntity<?> ListarPorData(@PathVariable String data) {
         try {
             List<Emprestimo> emprestimos = emprestimoService.buscarPorData(LocalDate.parse(data));
             return ResponseEntity.ok(emprestimos);

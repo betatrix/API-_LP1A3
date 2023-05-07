@@ -33,7 +33,7 @@ public class UsuarioController {
     /*###########################################   LIVROS  ############################################*/
 
     //RESERVAR LIVRO
-    @PostMapping("/reservarLivro")
+    @PostMapping("/reservarLivro/{idlivro}")
     public ResponseEntity<?> reservarLivro(@PathVariable Integer idlivro){
         try {
             Livro livroAtualizado = livroService.reservarLivro(idlivro);
@@ -44,7 +44,7 @@ public class UsuarioController {
     }
 
     //CANCELAR RESERVA DE LIVRO
-    @PostMapping("/cancelarReservar")
+    @PostMapping("/cancelarReserva/{idLivro}")
     public ResponseEntity<?> cancelarReserva(@PathVariable Integer idLivro){
         try{
             Livro livroAtualizado = livroService.cancelarReserva(idLivro);
@@ -66,6 +66,7 @@ public class UsuarioController {
             Integer idlivro = emprestimoDTO.getiDlivro();
             LocalDate dataEmprestimo = emprestimoDTO.getDataEmprestimo();
             LocalDate dataDevolucaoPrevista = emprestimoDTO.getDataDevolucaoPrevista();
+
             Cliente cliente = usuariosService.buscarCliente(cpfcliente);
             Funcionario funcionario = usuariosService.buscarFuncionario(cpffunc);
             Livro livro = livroService.buscarLivro(idlivro);
